@@ -1,8 +1,8 @@
-unless defined?(GemTemplate::Gems)
+unless defined?(FrameworkFixture::Gems)
   
   require 'rubygems'
   
-  module GemTemplate
+  class FrameworkFixture
     class Gems
     
       VERSIONS = {
