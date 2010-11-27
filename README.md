@@ -3,7 +3,12 @@ FrameworkFixture
 
 Dynamically generate Rails and Sinatra apps to be tested by <code>Rack::Test</code>.
 
-Why? Because I don't like committing tons of unnecessary fixture files to my projects.
+Why?
+----
+
+It is annoying to commit a bunch of Rails apps to my projects solely for the purpose of testing.
+
+Seems more DRY to generate them when I run the test and automatically copy specific files into it.
 
 Requirements
 ------------
