@@ -9,7 +9,7 @@ describe FrameworkFixture do
   end
   
   before(:all) do
-    @gem = ENV['RAILS'] ? 'rails' : ENV['SINATRA'] ? 'sinatra' : nil
+    @framework = ENV['RAILS'] ? 'rails' : ENV['SINATRA'] ? 'sinatra' : nil
     @exact_version = ENV['RAILS'] || ENV['SINATRA']
     @loose_version = @exact_version ? "<#{@exact_version.to_i + 1}" : nil
   end
@@ -37,8 +37,8 @@ describe FrameworkFixture do
   
   describe :require_gem do
     
-    it "should populate @gem" do
-      FrameworkFixture.framework.should == @gem
+    it "should populate @framework" do
+      FrameworkFixture.framework.should == @framework
     end
     
     it "should populate @loose_version" do
@@ -50,7 +50,7 @@ describe FrameworkFixture do
     end
     
     it "should return @loose_version when framework method is called" do
-      FrameworkFixture.send(@gem).should == @loose_version
+      FrameworkFixture.send(@framework).should == @loose_version
     end
   end
   
@@ -61,7 +61,7 @@ describe FrameworkFixture do
     end
     
     it "should populate @build" do
-      FrameworkFixture.build.should == "#{$root}/spec/fixtures/builds/#{@gem}#{@exact_version}"
+      FrameworkFixture.build.should == "#{$root}/spec/fixtures/builds/#{@framework}#{@exact_version}"
     end
     
     it "should populate @app" do
@@ -73,10 +73,10 @@ describe FrameworkFixture do
     end
     
     it "should require the environment" do
-      req = "#{$root}/spec/fixtures/builds/#{@gem}#{@exact_version}"
-      if @gem == 'rails'
+      req = "#{$root}/spec/fixtures/builds/#{@framework}#{@exact_version}"
+      if @framework == 'rails'
         req += "/config/environment.rb"
-      elsif @gem == 'sinatra'
+      elsif @framework == 'sinatra'
         req += "/application.rb"
       end
       $".include?(req).should == true
