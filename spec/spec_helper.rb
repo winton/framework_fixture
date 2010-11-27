@@ -1,9 +1,11 @@
 $root = File.expand_path('../../', __FILE__)
 require "#{$root}/lib/framework_fixture/gems"
+require "#{$root}/lib/framework_fixture"
 
+FrameworkFixture.generate File.dirname(__FILE__) + '/fixtures'
 FrameworkFixture::Gems.require(:spec)
 
-require "#{$root}/lib/framework_fixture"
+require 'rack/test'
 require 'pp'
 
 Spec::Runner.configure do |config|

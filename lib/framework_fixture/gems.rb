@@ -6,6 +6,7 @@ unless defined?(FrameworkFixture::Gems)
     class Gems
     
       VERSIONS = {
+        :'rack-test' => '=0.5.6',
         :rake => '=0.8.7',
         :rspec => '=1.3.1'
       }
@@ -15,7 +16,7 @@ unless defined?(FrameworkFixture::Gems)
         :gemspec_dev => [ :rspec ],
         :lib => [],
         :rake => [ :rake, :rspec ],
-        :spec => [ :rspec ]
+        :spec => [ :'rack-test', :rspec ]
       }
       
       class <<self

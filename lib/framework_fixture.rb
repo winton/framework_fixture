@@ -14,25 +14,25 @@ class FrameworkFixture
   class <<self
     
     attr_accessor :root
-    attr_reader :app, :build, :config, :config_version, :framework, :version
+    attr_reader :app, :build, :config, :exact_version, :loose_version, :framework
     
     def create_build
       FileUtils.mkdir_p @build = "#{@root}/builds"
       
       if rails
-        case @version[0..0]
+        case @exact_version[0..0]
         when '2' then
           @build += "/rails2"
           @app = lambda { ActionController::Dispatcher.new }
-          cmd = "rails _#{@version}_ #{@build}"
+          cmd = "rails _#{@exact_version}_ #{@build}"
         when '3' then
           @build += "/rails3"
           @app = lambda { Rails3::Application }
-          cmd = "rails _#{@version}_ new #{@build}"
+          cmd = "rails _#{@exact_version}_ new #{@build}"
         end
         req = @build + "/config/environment.rb"
       elsif sinatra
-        @build += "/sinatra#{@version[0..0]}"
+        @build += "/sinatra#{@exact_version[0..0]}"
         @app = lambda { Application.new }
         req = @build + "/application.rb"
       end
@@ -46,7 +46,7 @@ class FrameworkFixture
             FileUtils.mkdir_p @build
           end
         
-          if config = @config[@framework][@config_version]
+          if config = @config[@framework][@loose_version]
             config.each do |dir, files|
               files.each do |f|
                 if File.exists?(from = "#{@root}/#{dir}/#{File.basename(f)}")
@@ -75,33 +75,30 @@ class FrameworkFixture
     end
     
     def rails
-      @config_version if @framework == 'rails'
+      @loose_version if @framework == 'rails'
     end
     
     def require_gem
       if ENV['RAILS']
-        g = 'rails'
+        @framework = 'rails'
       elsif ENV['SINATRA']
-        g = 'sinatra'
+        @framework = 'sinatra'
       end
       
-      if g
-        v = ENV['RAILS'] || ENV['SINATRA']
+      if @framework
+        @loose_version = ENV['RAILS'] || ENV['SINATRA']
       
-        if v.match(/\d*/)[0].length == v.length
-          v = "<#{v.to_i + 1}"
+        if @loose_version.match(/\d*/)[0].length == @loose_version.length
+          @loose_version = "<#{@loose_version.to_i + 1}"
         end
         
-        gem g, v
-        
-        @config_version = v
-        @framework = g
-        @version = Gem.loaded_specs[g].version.to_s
+        gem @framework, @loose_version
+        @exact_version = Gem.loaded_specs[@framework].version.to_s
       end
     end
     
     def sinatra
-      @config_version if @framework == 'sinatra'
+      @loose_version if @framework == 'sinatra'
     end
   end
 end
