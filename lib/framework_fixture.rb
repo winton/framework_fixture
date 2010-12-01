@@ -45,14 +45,14 @@ class FrameworkFixture
           else
             FileUtils.mkdir_p @build
           end
+        end
         
-          if config = @config[@framework][@loose_version]
-            config.each do |dir, files|
-              files.each do |f|
-                if File.exists?(from = "#{@root}/#{dir}/#{File.basename(f)}")
-                  FileUtils.mkdir_p File.dirname("#{@build}/#{f}")
-                  FileUtils.cp from, "#{@build}/#{f}"
-                end
+        if config = @config[@framework][@loose_version]
+          config.each do |dir, files|
+            files.each do |f|
+              if File.exists?(from = "#{@root}/#{dir}/#{File.basename(f)}")
+                FileUtils.mkdir_p File.dirname("#{@build}/#{f}")
+                FileUtils.cp from, "#{@build}/#{f}"
               end
             end
           end
