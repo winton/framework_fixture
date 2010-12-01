@@ -1,3 +1,3 @@
 class FrameworkFixture
-  VERSION = "0.1.0" unless defined?(::FrameworkFixture::VERSION)
+  VERSION = "0.1.1" unless defined?(::FrameworkFixture::VERSION)
 end

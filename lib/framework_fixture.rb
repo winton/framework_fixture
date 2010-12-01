@@ -50,6 +50,7 @@ class FrameworkFixture
             config.each do |dir, files|
               files.each do |f|
                 if File.exists?(from = "#{@root}/#{dir}/#{File.basename(f)}")
+                  FileUtils.mkdir_p File.dirname("#{@build}/#{f}")
                   FileUtils.cp from, "#{@build}/#{f}"
                 end
               end
