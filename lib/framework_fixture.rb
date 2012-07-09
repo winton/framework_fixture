@@ -10,7 +10,7 @@ class FrameworkFixture
   class <<self
     
     attr_accessor :root
-    attr_reader :app, :build, :config, :exact_version, :loose_version, :framework
+    attr_reader :app, :build, :config, :exact_version, :framework, :loose_version
     
     def create_build
       FileUtils.mkdir_p @build = "#{@root}/builds"
@@ -76,6 +76,15 @@ class FrameworkFixture
     end
     
     def require_gem
+      set_vars
+      
+      if @framework
+        gem @framework, @loose_version
+        @exact_version = Gem.loaded_specs[@framework].version.to_s
+      end
+    end
+    
+    def set_vars
       if ENV['RAILS']
         @framework = 'rails'
       elsif ENV['SINATRA']
@@ -88,15 +97,13 @@ class FrameworkFixture
         if @loose_version.match(/\d*/)[0].length == @loose_version.length
           @loose_version = "<#{@loose_version.to_i + 1}"
         end
-
-        gem @framework, @loose_version
-
-        @exact_version = Gem.loaded_specs[@framework].version.to_s
       end
     end
     
     def sinatra
       @loose_version if @framework == 'sinatra'
     end
+    
+    FrameworkFixture.set_vars
   end
 end
