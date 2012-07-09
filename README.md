@@ -83,6 +83,6 @@ Run Tests With Framework Environment Variable
 ---------------------------------------------
 
 <pre>
-RAILS=3 spec spec
+RAILS_ENV=test RAILS=3 spec spec
 SINATRA=1 spec spec
 </pre>

@@ -28,7 +28,7 @@ if FrameworkFixture.framework
             {"rails3"=>
               ["app/controllers/application_controller.rb",
                "config/application.rb",
-               "config/environments/development.rb",
+               "config/environments/test.rb",
                "config/routes.rb",
                "Gemfile"]}},
          "sinatra"=>
