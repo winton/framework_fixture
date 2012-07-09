@@ -3,15 +3,20 @@ require 'spec_helper'
 if FrameworkFixture.framework
   describe FrameworkFixture do
   
-    include Rack::Test::Methods
-  
-    def app
-      FrameworkFixture.app.call
+    unless ENV['STASIS']
+      include Rack::Test::Methods
+    
+      def app
+        FrameworkFixture.app.call
+      end
     end
   
     before(:all) do
-      @framework = ENV['RAILS'] ? 'rails' : ENV['SINATRA'] ? 'sinatra' : nil
-      @exact_version = ENV['RAILS'] || ENV['SINATRA']
+      @framework = ENV['RAILS'] ?
+        'rails' : ENV['SINATRA'] ?
+          'sinatra' : ENV['STASIS'] ?
+            'stasis' : nil
+      @exact_version = ENV['RAILS'] || ENV['SINATRA'] || ENV['STASIS']
       @loose_version = @exact_version ? "<#{@exact_version.to_i + 1}" : nil
     end
   
@@ -80,16 +85,22 @@ if FrameworkFixture.framework
           req += "/config/environment.rb"
         elsif @framework == 'sinatra'
           req += "/application.rb"
+        elsif @framework == 'stasis'
+          req = nil
         end
-        $".include?(req).should == true
+        if req
+          $".include?(req).should == true
+        end
       end
     end
   
-    describe :rack_test do
-    
-      it "should have a pulse" do
-        get "/pulse"
-        last_response.body.should == '1'
+    unless ENV['STASIS']
+      describe :rack_test do
+      
+        it "should have a pulse" do
+          get "/pulse"
+          last_response.body.should == '1'
+        end
       end
     end
   end
