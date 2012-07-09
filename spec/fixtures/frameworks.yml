@@ -18,3 +18,7 @@ sinatra:
   <2:
     sinatra:
       - application.rb
+stasis:
+  <1:
+    stasis:
+      - test.html.erb

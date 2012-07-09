@@ -23,22 +23,24 @@ if FrameworkFixture.framework
     describe :load_config do
   
       it "should populate @config" do
-        FrameworkFixture.config.should == {"rails"=>
-          {"<3"=>
-            {"rails2"=>
-              ["app/controllers/application_controller.rb",
-               "config/environment.rb",
-               "config/routes.rb"]},
-           "<4"=>
-            {"rails3"=>
-              ["app/controllers/application_controller.rb",
-               "config/application.rb",
-               "config/environments/test.rb",
-               "config/routes.rb",
-               "Gemfile"]}},
+        FrameworkFixture.config.should == {
+          "rails"=>
+            {"<3"=>
+              {"rails2"=>
+                ["app/controllers/application_controller.rb",
+                 "config/environment.rb",
+                 "config/routes.rb"]},
+             "<4"=>
+              {"rails3"=>
+                ["app/controllers/application_controller.rb",
+                 "config/application.rb",
+                 "config/environments/test.rb",
+                 "config/routes.rb",
+                 "Gemfile"]}},
          "sinatra"=>
           {"<1"=>{"sinatra"=>["application.rb"]},
-           "<2"=>{"sinatra"=>["application.rb"]}}}
+           "<2"=>{"sinatra"=>["application.rb"]}},
+         "stasis"=>{"<1"=>{"stasis"=>["test.html.erb"]}}}
       end
     end
   
@@ -94,7 +96,20 @@ if FrameworkFixture.framework
       end
     end
   
-    unless ENV['STASIS']
+    if ENV['STASIS']
+      describe "app.call" do
+
+        before :all do
+          @stasis = FrameworkFixture.app.call
+          @stasis.render
+        end
+
+        it "should render test markup" do
+          @stasis.destination.should == "#{$root}/spec/fixtures/builds/#{@framework}#{@exact_version}_output"
+          File.read("#{@stasis.destination}/test.html").should == 'true'
+        end
+      end
+    else
       describe :rack_test do
       
         it "should have a pulse" do
