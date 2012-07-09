@@ -1,14 +1,10 @@
-require File.dirname(__FILE__) + '/framework_fixture/gems'
-
-FrameworkFixture::Gems.require(:lib)
-
 require 'fileutils'
-require 'rubygems'
 require 'yaml'
 
-$:.unshift File.dirname(__FILE__) + '/framework_fixture'
+require 'rubygems'
+require 'rack/test'
 
-require 'version'
+$:.unshift File.dirname(__FILE__)
 
 class FrameworkFixture
   class <<self
@@ -92,8 +88,9 @@ class FrameworkFixture
         if @loose_version.match(/\d*/)[0].length == @loose_version.length
           @loose_version = "<#{@loose_version.to_i + 1}"
         end
-        
+
         gem @framework, @loose_version
+
         @exact_version = Gem.loaded_specs[@framework].version.to_s
       end
     end

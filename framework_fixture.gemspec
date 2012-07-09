@@ -1,29 +1,28 @@
 # -*- encoding: utf-8 -*-
-lib = File.expand_path('../lib/', __FILE__)
-$:.unshift lib unless $:.include?(lib)
+root = File.expand_path('../', __FILE__)
+lib = "#{root}/lib"
 
-require 'framework_fixture/gems'
-require 'framework_fixture/version'
+$:.unshift lib unless $:.include?(lib)
 
 Gem::Specification.new do |s|
   s.name = "framework_fixture"
-  s.version = FrameworkFixture::VERSION
+  s.version = '0.1.2'
   s.platform = Gem::Platform::RUBY
   s.authors = ["Winton Welsh"]
   s.email = ["mail@wintoni.us"]
   s.homepage = "http://github.com/winton/framework_fixture"
-  s.summary = ""
-  s.description = ""
+  s.summary = "Dynamically generate Rails and Sinatra apps to be tested by Rack::Test"
+  s.description = "Dynamically generate Rails and Sinatra apps to be tested by Rack::Test."
 
-  FrameworkFixture::Gems::TYPES[:gemspec].each do |g|
-    s.add_dependency g.to_s, FrameworkFixture::Gems::VERSIONS[g]
-  end
-  
-  FrameworkFixture::Gems::TYPES[:gemspec_dev].each do |g|
-    s.add_development_dependency g.to_s, FrameworkFixture::Gems::VERSIONS[g]
-  end
+  s.executables = `cd #{root} && git ls-files bin/*`.split("\n").collect { |f| File.basename(f) }
+  s.files = `cd #{root} && git ls-files`.split("\n")
+  s.require_paths = %w(lib)
+  s.test_files = `cd #{root} && git ls-files -- {features,test,spec}/*`.split("\n")
 
-  s.files = Dir.glob("{bin,lib}/**/*") + %w(LICENSE README.md)
-  s.executables = Dir.glob("{bin}/*").collect { |f| File.basename(f) }
-  s.require_path = 'lib'
+  s.add_development_dependency "rake"
+  s.add_development_dependency "rails", "~> 3.0"
+  s.add_development_dependency "sinatra", "~> 1.0"
+  s.add_development_dependency "rspec", "~> 1.0"
+
+  s.add_dependency "rack-test", "=0.6.1"
 end

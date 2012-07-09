@@ -3,6 +3,8 @@ FrameworkFixture
 
 Dynamically generate Rails and Sinatra apps to be tested by <code>Rack::Test</code>.
 
+[![Build Status](https://secure.travis-ci.org/winton/framework_fixture.png)](http://travis-ci.org/winton/framework_fixture)
+
 Why?
 ----
 
@@ -81,7 +83,6 @@ Run Tests With Framework Environment Variable
 ---------------------------------------------
 
 <pre>
-RAILS=2 spec spec
 RAILS=3 spec spec
 SINATRA=1 spec spec
 </pre>
